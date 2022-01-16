@@ -3,14 +3,14 @@ import { hash } from 'bcryptjs';
 
 import User from '../models/User';
 
-interface RequestDTO {
+interface Request {
   name: string;
   email: string;
   password: string;
 }
 
 class CreateUserService {
-  async execute({ name, email, password }: RequestDTO): Promise<User> {
+  async execute({ name, email, password }: Request): Promise<User> {
     const userRepository = getRepository(User);
 
     const checkUserExists = await userRepository.findOne({
