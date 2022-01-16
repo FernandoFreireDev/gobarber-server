@@ -19,12 +19,12 @@ sessionsRouter.post('/', async (request, response) => {
 
     const createSession = new CreateSessionSerivce();
 
-    const { user } = await createSession.execute({ email, password });
+    const { user, token } = await createSession.execute({ email, password });
 
     const userSerialized: UserResponse = user;
     delete userSerialized.password;
 
-    return response.json({ userSerialized });
+    return response.json({ userSerialized, token });
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }
