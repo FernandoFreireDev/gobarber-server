@@ -2,6 +2,15 @@ import { Router } from 'express';
 
 import CreateUserService from '../services/CreateUserService';
 
+interface UserResponse {
+  name: string;
+  email: string;
+  password?: string;
+  id: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 const usersRouter = Router();
 
 usersRouter.post('/', async (request, response) => {
@@ -10,7 +19,13 @@ usersRouter.post('/', async (request, response) => {
 
     const createUser = new CreateUserService();
 
-    const user = await createUser.execute({ name, email, password });
+    const user: UserResponse = await createUser.execute({
+      name,
+      email,
+      password,
+    });
+
+    delete user.password;
 
     return response.json(user);
   } catch (err) {
