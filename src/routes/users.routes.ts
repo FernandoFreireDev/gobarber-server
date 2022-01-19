@@ -19,23 +19,19 @@ const usersRouter = Router();
 const upload = multer(uploadConfig);
 
 usersRouter.post('/', async (request, response) => {
-  try {
-    const { name, email, password } = request.body;
+  const { name, email, password } = request.body;
 
-    const createUser = new CreateUserService();
+  const createUser = new CreateUserService();
 
-    const user: UserResponse = await createUser.execute({
-      name,
-      email,
-      password,
-    });
+  const user: UserResponse = await createUser.execute({
+    name,
+    email,
+    password,
+  });
 
-    delete user.password;
+  delete user.password;
 
-    return response.json(user);
-  } catch (error) {
-    return response.status(400).json({ error: error.message });
-  }
+  return response.json(user);
 });
 
 usersRouter.patch(
@@ -43,27 +39,23 @@ usersRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (request, response) => {
-    try {
-      const user_id = request.user.id;
-      const avatarFilename = request.file?.filename;
+    const user_id = request.user.id;
+    const avatarFilename = request.file?.filename;
 
-      if (!avatarFilename) {
-        return response.status(400).json({ error: 'Error rescuing filename' });
-      }
-
-      const updateUserAvatar = new UpdateAvatarUserService();
-
-      const user: UserResponse = await updateUserAvatar.execute({
-        user_id,
-        avatarFilename,
-      });
-
-      delete user.password;
-
-      return response.json(user);
-    } catch (error) {
-      return response.status(400).json({ error: error.message });
+    if (!avatarFilename) {
+      return response.status(400).json({ error: 'Error rescuing filename' });
     }
+
+    const updateUserAvatar = new UpdateAvatarUserService();
+
+    const user: UserResponse = await updateUserAvatar.execute({
+      user_id,
+      avatarFilename,
+    });
+
+    delete user.password;
+
+    return response.json(user);
   },
 );
 

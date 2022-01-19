@@ -14,20 +14,16 @@ interface UserResponse {
 const sessionsRouter = Router();
 
 sessionsRouter.post('/', async (request, response) => {
-  try {
-    const { email, password } = request.body;
+  const { email, password } = request.body;
 
-    const createSession = new CreateSessionSerivce();
+  const createSession = new CreateSessionSerivce();
 
-    const { user, token } = await createSession.execute({ email, password });
+  const { user, token } = await createSession.execute({ email, password });
 
-    const userSerialized: UserResponse = user;
-    delete userSerialized.password;
+  const userSerialized: UserResponse = user;
+  delete userSerialized.password;
 
-    return response.json({ userSerialized, token });
-  } catch (error) {
-    return response.status(error.statusCode).json({ error: error.message });
-  }
+  return response.json({ userSerialized, token });
 });
 
 export default sessionsRouter;
