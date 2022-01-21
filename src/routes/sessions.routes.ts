@@ -23,7 +23,7 @@ sessionsRouter.post('/', async (request, response) => {
   const userSerialized: UserResponse = user;
   delete userSerialized.password;
 
-  return response.json({ userSerialized, token });
+  return response.json({ user: userSerialized, token });
 });
 
 export default sessionsRouter;
